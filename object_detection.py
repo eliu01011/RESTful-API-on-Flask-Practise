@@ -110,13 +110,12 @@ def do_prediction(image, net, LABELS):
     if len(idxs) > 0:
         # loop over the indexes we are keeping
         for i in idxs.flatten():
-            result.append({"detected item": LABELS[classIDs[i]],
+            result.append({"label": LABELS[classIDs[i]],
                            "accuracy": confidences[i],
-                           "X": boxes[i][0],
-                           "Y": boxes[i][1],
-                           "width": boxes[i][2],
-                           "height": boxes[i][3]})
-            # logging.warning("******prediction******", type(result))
+                           "rectangle": {"left": boxes[i][0],
+                                         "top": boxes[i][1],
+                                         "width": boxes[i][2],
+                                         "height": boxes[i][3]}})
         return result
 
 
