@@ -110,6 +110,7 @@ def do_prediction(image, net, LABELS):
     if len(idxs) > 0:
         # loop over the indexes we are keeping
         for i in idxs.flatten():
+            # append predictions of the image into result
             result.append({"label": LABELS[classIDs[i]],
                            "accuracy": confidences[i],
                            "rectangle": {"left": boxes[i][0],
@@ -140,12 +141,15 @@ Weights = get_weights(wpath)
 # TODO, you should  make this console script into webservice using Flask
 def main(img_data):
     try:
-        # imagefile = str(sys.argv[2])
+        # img_data is byte object
+        # read the img_data into input array (matrix)
         decoded = cv2.imdecode(np.frombuffer(img_data, np.uint8), -1)
-        # logging.warning("BYTEEEEEEEEEE!" + str(decoded))
-        # img = cv2.imread(decoded)
+
+        # convert input matrix array into numpy array
         npimg = np.array(decoded)
         image = npimg.copy()
+
+        # do the conversion of the RGB
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
         # load the neural net.  Should be local to this method as its multi-threaded endpoint

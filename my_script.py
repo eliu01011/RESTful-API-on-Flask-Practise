@@ -28,20 +28,28 @@ def index():
 def detection():
     # Convert JSON string to dictionary
     data_dict = json.loads(request.get_json())
+
+    # img_data is decoded from base64 to byte object
     img_data = base64.b64decode(data_dict["image"])
-    # result is list of detection object result
+
+    # call the objection_detection to perform prediction with the POST input image
     result = object_detection.main(img_data)
+
+    # get image uuid
     image_id = data_dict["id"]
+
+    # combine id and prediction result for output
     output = {"id": image_id, "objects": result}
 
-    # logging.warning("******RESULT******:  ", result)
-
+    # make the response and return to client iWebLens
     response = app.response_class(
+        # convert output dictionary to json
         response=json.dumps(output, indent=4),
         status=200,
         mimetype='application/json'
     )
     return response
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0')
